@@ -24,17 +24,6 @@ char *simple = "From nobody Wed Sep 14 16:47:48 2005\n"
 	"    this is a test message\n"
 	"\n";
 
-char *simple_broken_envelope = " May 28 18:10:18 2010\n"
-	"X-Foo: bar\n"
-	"Message-Id: <1199706209l.3020l.0l@(none)>\n"
-	"Subject: dbmail test message\n"
-	"MIME-Version: 1.0\n"
-	"\n"
-	"\n"
-	"    this is a test message\n"
-	"\n";
-
-
 char *simple_with_from = "From nobody@pacific.net.sg Tue Dec 04 19:52:17 2007\n"
 	"X-Envelope-From: <nobody@pacific.net.sg>\n"
 	"Received: from [127.0.0.1] (port=49353 helo=test11)\n"
@@ -53,7 +42,6 @@ char *simple_with_from = "From nobody@pacific.net.sg Tue Dec 04 19:52:17 2007\n"
 	"From what I know, this line gets truncated\n"
 	"This line gets truncated\n"
 	"This other line get truncated too\n";
-
 
 char *simple_groups = "From user@domain  Fri Feb 22 17:06:23 2008\n"
 	"Date: Thu, 15 Feb 2007 01:02:03 +0200\n"
@@ -28269,3 +28257,18 @@ char *multipart_message_big = "From: \"Gennadiy Poryev\" <vecanoi@gmail.com>\n"
 "/g8HAAAAAwANNP0/pQ4DAA80/T+lDvA8\n"
 "\n"
 "------=_NextPart_000_0000_01CDFBC6.932A1F00--\n";
+
+char *utf8_subject =
+"Subject: =?UTF-8?B?0J/RgNC40LzQtdGAINC00L7RgdGC0LDRgtC+0YfQvdC+INC00Ls=?=\n"
+" =?UTF-8?B?0LjQvdC90L7Qs9C+INGC0LXQutGB0YLQsCDQsiDQv9C+0LvQtQ==?= Subject\n"
+" =?UTF-8?B?0LIg0LzQvdC+0LPQvtCx0LDQudGC0L7QstGL0YUg0YHQuNC80LLQvtC70LA=?=\n"
+" =?UTF-8?B?0YUgKNC90LDQv9GA0LjQvNC10YAsINC90LDQv9C40YHQsNC90L3Ri9GFINC9?=\n"
+" =?UTF-8?B?0LAg0YDRg9GB0YHQutC+0Lwg0Y/Qt9GL0LrQtSkg0L/RgNC40LLQvtC00Lg=?=\n"
+" =?UTF-8?B?0YIg0Log0YLQvtC80YMsINGH0YLQvg==?= sortfield =?UTF-8?B?0YTQvtGA?=\n"
+" =?UTF-8?B?0LzQuNGA0YPQtdGC0YHRjyDQsdC10Lcg0YPRh9GR0YLQsCDQvNC90L7Qs9C+?=\n"
+" =?UTF-8?B?0LHQsNC50YLQvtCy0YvRhSDRgdC40LzQstC+0LvQvtCyLCDRh9GC0L4g0LIg?=\n"
+" =?UTF-8?B?0YHQstC+0Y4g0L7Rh9C10YDQtdC00Ywg0L/RgNC40LLQvtC00LjRgiDQuiA=?=\n"
+" =?UTF-8?B?0YLQvtC80YMsINGH0YLQviDQsiDRgdGC0YDQvtC60LUg0L/RgNC40YHRg9GC?=\n"
+" =?UTF-8?B?0YHRgtCy0YPQtdGCINGC0L7Qu9GM0LrQviDQvdCw0YfQsNC70L4g0YHQuNC8?=\n"
+" =?UTF-8?B?0LLQvtC70LAuINCa0LDQuiwg0L3QsNC/0YDQuNC80LXRgCwg0LIg0Y3RgtC+?=\n"
+" =?UTF-8?B?0Lkg0YHRgtGA0L7QutC1Lg==?=\n";

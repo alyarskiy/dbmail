@@ -462,7 +462,6 @@ START_TEST(test_dbmail_message_get_internal_date)
 	const char *expect = "2005-09-14 16:47:48";
 	const char *expect03 = "2003-09-14 16:47:48";
 	const char *expect75 = "1975-09-14 16:47:48";
-	const char *expect10 = "2010-05-28 18:10:18";
 	char *result;
 
 	/* baseline */
@@ -491,18 +490,7 @@ START_TEST(test_dbmail_message_get_internal_date)
 	g_free(result);
 
 	dbmail_message_free(m);
-
-	// test work-around for broken envelope header
-	m = dbmail_message_new(NULL);
-	m = dbmail_message_init_with_string(m, simple_broken_envelope);
-	char *before = dbmail_message_to_string(m);
-	char *after = store_and_retrieve(m);
-	result = dbmail_message_get_internal_date(m, 0);
-
-	fail_unless(MATCH(expect10,result),"dbmail_message_get_internal_date failed exp [%s] got [%s]", expect10, result);
-	COMPARE(before, after);
-	g_free(before);
-	g_free(after);
+	
 }
 END_TEST
 
@@ -649,6 +637,54 @@ START_TEST(test_dbmail_message_get_header)
 }
 END_TEST
 
+extern DBParam_T db_params;
+#define DBPFX db_params.pfx
+
+int test_db_get_subject(uint64_t physid, char **subject)
+{
+        Connection_T c; ResultSet_T r;
+        const char *query_result = NULL;
+        volatile int t = DM_EGENERAL;
+
+        c = db_con_get();
+        TRY
+                r = db_query(c, "SELECT subjectfield "
+                                "FROM %ssubjectfield WHERE physmessage_id = %" PRIu64 "",
+                                DBPFX,physid);
+                if (db_result_next(r)) {
+                        query_result = db_result_get(r, 0);
+                        if (query_result && (strlen(query_result) > 0)) {
+                                *subject = g_strdup(query_result);
+                        }
+                }
+                t = DM_SUCCESS;
+        CATCH(SQLException)
+                LOG_SQLERROR;
+        FINALLY
+                db_con_close(c);
+        END_TRY;
+
+        return t;
+}
+
+START_TEST(test_dbmail_message_utf8_subject)
+{
+	DbmailMessage *m;
+	uint64_t id = 0;
+	char *s = NULL;
+
+        m = dbmail_message_new(NULL);
+        m = dbmail_message_init_with_string(m,utf8_subject);
+	dbmail_message_store(m);
+	id = dbmail_message_get_physid(m);
+	dbmail_message_free(m);
+
+	test_db_get_subject(id,&s);
+	fail_unless(s!=NULL, "get_header failed on long utf8 subject");
+
+}
+END_TEST
+
 START_TEST(test_dbmail_message_encoded)
 {
 	DbmailMessage *m = dbmail_message_new(NULL);
@@ -714,6 +750,7 @@ START_TEST(test_dbmail_message_cache_headers)
 			);
 	dbmail_message_store(m);
 	dbmail_message_free(m);
+
 }
 END_TEST
 
@@ -898,6 +935,7 @@ Suite *dbmail_message_suite(void)
 	tcase_add_test(tc_message, test_dbmail_message_body_to_string);
 	tcase_add_test(tc_message, test_dbmail_message_set_header);
 	tcase_add_test(tc_message, test_dbmail_message_get_header);
+	tcase_add_test(tc_message, test_dbmail_message_utf8_subject);
 	tcase_add_test(tc_message, test_dbmail_message_cache_headers);
 	tcase_add_test(tc_message, test_dbmail_message_free);
 	tcase_add_test(tc_message, test_dbmail_message_encoded);
