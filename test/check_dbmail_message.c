@@ -671,7 +671,7 @@ START_TEST(test_dbmail_message_utf8_subject)
 {
 	DbmailMessage *m;
 	uint64_t id = 0;
-	char *s = NULL;
+	char *s = NULL, *t = NULL;
 
         m = dbmail_message_new(NULL);
         m = dbmail_message_init_with_string(m,utf8_subject);
@@ -681,6 +681,18 @@ START_TEST(test_dbmail_message_utf8_subject)
 
 	test_db_get_subject(id,&s);
 	fail_unless(s!=NULL, "get_header failed on long utf8 subject");
+	id = 0;
+	g_free(s);
+
+	m = dbmail_message_new(NULL);
+	m = dbmail_message_init_with_string(m,utf8_invalid_sequence);
+	dbmail_message_store(m);
+	id = dbmail_message_get_physid(m);
+	dbmail_message_free(m);
+
+	test_db_get_subject(id,&t);
+	fail_unless(t!=NULL, "get_header failed on utf8 invalid sequence in subject");
+	g_free(t);
 
 }
 END_TEST
