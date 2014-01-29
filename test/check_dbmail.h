@@ -28274,4 +28274,5 @@ char *utf8_subject =
 " =?UTF-8?B?0Lkg0YHRgtGA0L7QutC1Lg==?=\n";
 
 char *utf8_invalid_sequence = 
-"Subject: =?utf-8?B?0J/RgNC40LPQu9Cw0YjQsNC10Lwg0L3QsCDRgdC10YDQ?=\n";
+"Subject: =?utf-8?B?0J/RgNC40LPQu9Cw0YjQsNC10Lwg0L3QsCDRgdC10YDQ?= Error is in the middle of the string\n"
+" =?UTF-8?B?0LLQvtC70LAuINCa0LDQuiwg0L3QsNC/0YDQuNC80LXRgCwg0LIg0Y3RgtC+?=\n";
